@@ -9,8 +9,8 @@ let DividerWidthHalf=DividerWidth/2
 
 Divider="$( eval "printf '*%.0s' {1..$DividerWidth}" )\n"
 
-. ./colors.sh
-. ./helpers.sh
+. ./scripts/colors.sh
+. ./scripts/helpers.sh
 
 # {{{ Warning Message
 printf "$Red"
@@ -37,10 +37,10 @@ done
 # {{{ Platform specific
 if [ "$(uname)" == "Darwin" ]; then
   # Mac OS X
-  . ./macosx.sh
+  . ./scripts/macosx.sh
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
   # GNU/Linux
-  . ./linux.sh
+  . ./scripts/linux.sh
 elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
   # Windows
   echo ""
