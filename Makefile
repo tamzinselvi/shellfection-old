@@ -18,3 +18,4 @@ update:
 	git rebase origin/master
 	git stash pop
 	make install
+	make vundle

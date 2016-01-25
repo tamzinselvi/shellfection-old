@@ -119,3 +119,6 @@ endif
 
 let g:syntastic_cpp_compiler = 'g++'
 let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+
+" vim-airline
+let g:airline#extensions#tabline#enabled = 1
