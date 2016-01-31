@@ -38,7 +38,6 @@ while true; do
   read -p "" yn
   case $yn in
     [Yy]* )
-      sudo apt-get -y install
       git clone https://github.com/tmux/tmux
       cd tmux
       sh autogen.sh

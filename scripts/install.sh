@@ -103,6 +103,24 @@ if [ "$SHELL" != "$( which zsh )" ]; then
 fi
 # }}}
 
+# {{{ tmux color matcher
+# ColorStart=$( grep -n "COLORS: START" tmux.conf | cut -d : -f1 )
+# ColorEnd=$( grep -n "COLORS: END" tmux.conf | cut -d : -f1 )
+# let ColorEnd=ColorEnd+1
+# TMUXConf=$( sed "$ColorStart,${ColorEnd}d" tmux.conf )
+# TMUXColor1="$( cat ~/.vim/bundle/color-scheme-holokai-for-vim/colors/holokai.vim | grep "SignColumn.*#" | sed -e "s/hi[ ]*SignColumn[ ]*guifg=\(#[^ ]*\).*/\1/g" )"
+# TMUXColor2="$( cat ~/.vim/bundle/color-scheme-holokai-for-vim/colors/holokai.vim | grep "SignColumn.*#" | sed -e "s/hi[ ]*SignColumn[ ]*.*guibg=\(#[^ ]*\).*/\1/g" )"
+# TMUXColor3="$( cat ~/.vim/bundle/color-scheme-holokai-for-vim/colors/holokai.vim | grep "Pmenu[ ]\+.*#" | sed -e "s/hi[ ]*Pmenu[ ]*.*guibg=\(#[^ ]*\).*/\1/g" )"
+# rm tmux.conf
+# echo "# COLORS: START" >> tmux.conf
+# echo "COLOR_STATUS_FG='$TMUXColor1'" >> tmux.conf
+# echo "COLOR_STATUS_BG='$TMUXColor2'" >> tmux.conf
+# echo "COLOR_CURRENT_STATUS_BG='$TMUXColor3'" >> tmux.conf
+# echo "# COLORS: END" >> tmux.conf
+# echo "" >> tmux.conf
+# echo "$TMUXConf" >> tmux.conf
+# }}}
+
 # {{{ Link Setting Files
 printf "$Purple"
 printf "$Divider"
@@ -112,7 +130,7 @@ nl
 printf "$Divider"
 nl
 
-for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf zshrc zshrc.local aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
+for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.local aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
   rm ~/.$file > /dev/null 2>&1
   ln $file ~/.$file
   printf "$Yellow"
@@ -133,7 +151,7 @@ textwrap center "Untracking local files..."
 nl
 printf "$Divider"
 
-for file in vimrc.local vimrc.bundles.local zshrc.local aliasrc.local bashrc.local; do
+for file in vimrc.local vimrc.bundles.local zshrc.local aliasrc.local bashrc.local tmux.conf.local; do
   git update-index --assume-unchanged $file
   printf "$Yellow"
   textwrap center "Stopped tracking $file"
