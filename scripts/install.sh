@@ -47,6 +47,54 @@ elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
 fi
 # }}}
 
+# {{{ Install custom executables
+printf "$Purple"
+printf "$Divider"
+nl
+textwrap center "Installing custom executables..."
+nl
+printf "$Divider"
+nl
+
+for file in pipeseroni-pipes shellfection-screensavers; do
+  cp bin/$file /usr/local/bin/$file
+  chmod +x /usr/local/bin/$file
+  printf "$Yellow"
+  textwrap center "Copied $file to /usr/local/bin/$file"
+done
+
+printf "$Green"
+nl
+textwrap center "Finished linking..."
+nl
+# }}}
+
+# {{{ Install PIP Packages
+for pkg in pillow drawille; do
+  printf "$Purple"
+  printf "$Divider"
+  nl
+  textwrap center "Checking for $pkg..."
+  nl
+  printf "$Divider"
+
+  if ! pip list 2>/dev/null | grep -iq $pkg; then
+    printf "$Yellow"
+    nl
+    textwrap center "$pkg not found, installing..."
+    nl
+    sudo pip install $pkg
+    let Success=Success+1
+  else
+    printf "$Green"
+    nl
+    textwrap center "$pkg is already installed, continuing..."
+    nl
+    let NoChanges=NoChanges+1
+  fi
+done
+# }}}
+
 # {{{ Install Vundle
 printf "$Purple"
 printf "$Divider"
@@ -99,6 +147,27 @@ if [ "$SHELL" != "$( which zsh )" ]; then
       [Nn]* ) break;;
       * ) textwrap center "Please answer yes or no.";;
     esac
+# {{{ Link Setting Files
+printf "$Purple"
+printf "$Divider"
+nl
+textwrap center "Linking settings..."
+nl
+printf "$Divider"
+nl
+
+for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.local aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
+  rm ~/.$file > /dev/null 2>&1
+  ln $file ~/.$file
+  printf "$Yellow"
+  textwrap center "Linked $file to ~/.$file"
+done
+
+printf "$Green"
+nl
+textwrap center "Finished linking..."
+nl
+# }}}
   done
 fi
 # }}}

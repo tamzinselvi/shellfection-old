@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Useful variables
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Screensaver commands go here
+PIPES="pipeseroni-pipes"
+CMATRIX="cmatrix -sb"
+
+# Map screensavers here
+SCREENSAVERS=( "$PIPES" "$CMATRIX" )
+
+# Pick random screensaver from list
+SCREENSAVER=${SCREENSAVERS[$RANDOM % ${#SCREENSAVERS[@]} ]}
+$SCREENSAVER
