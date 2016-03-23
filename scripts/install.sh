@@ -51,16 +51,17 @@ fi
 printf "$Purple"
 printf "$Divider"
 nl
-textwrap center "Installing custom executables..."
+textwrap center "Linking custom executables..."
 nl
 printf "$Divider"
 nl
 
-for file in pipeseroni-pipes shellfection-screensavers; do
-  cp bin/$file /usr/local/bin/$file
+for file in pipeseroni-pipes shellfection-screensavers shellfection-welcome; do
+  rm /usr/local/bin/$file
+  ln bin/$file /usr/local/bin/$file
   chmod +x /usr/local/bin/$file
   printf "$Yellow"
-  textwrap center "Copied $file to /usr/local/bin/$file"
+  textwrap center "Linked $file to /usr/local/bin/$file"
 done
 
 printf "$Green"
@@ -156,7 +157,7 @@ nl
 printf "$Divider"
 nl
 
-for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.local aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
+for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.local zshrc.omz aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
   rm ~/.$file > /dev/null 2>&1
   ln $file ~/.$file
   printf "$Yellow"
@@ -199,7 +200,7 @@ nl
 printf "$Divider"
 nl
 
-for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.local aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
+for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.omz zshrc.local aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
   rm ~/.$file > /dev/null 2>&1
   ln $file ~/.$file
   printf "$Yellow"

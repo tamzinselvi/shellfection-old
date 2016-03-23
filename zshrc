@@ -116,6 +116,16 @@ RPROMPT='$(info-git)%f'
 # }}}
 # }}}
 
+# {{{ oh-my-zsh
+. ~/.zshrc.omz
+# }}}
+
 # {{{ Local
 . ~/.zshrc.local
+# }}}
+
+# {{{ Welcome prompt if not in TMUX
+if ! { [ -n "$TMUX" ]; } then
+  # shellfection-welcome
+fi
 # }}}

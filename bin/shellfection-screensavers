@@ -3,7 +3,9 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Screensaver commands go here
-PIPES="pipeseroni-pipes"
+PIPE_COUNT=$(($RANDOM%5+1))
+TYPES=$(($RANDOM%8+1))
+PIPES="pipeseroni-pipes -p $PIPE_COUNT -t $TYPES"
 
 COLORS=( "red" "green" "yellow" "blue" "magenta" "cyan" "white" "black" )
 COLOR=${COLORS[$RANDOM % ${#COLORS[@]} ]}
