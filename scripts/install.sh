@@ -56,7 +56,7 @@ nl
 printf "$Divider"
 nl
 
-for file in pipeseroni-pipes shellfection-screensavers shellfection-welcome; do
+for file in pipeseroni-pipes shellfection-screensavers shellfection-welcome shellfection-cube; do
   rm /usr/local/bin/$file
   ln bin/$file /usr/local/bin/$file
   chmod +x /usr/local/bin/$file
