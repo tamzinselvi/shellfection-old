@@ -18,6 +18,9 @@ from subprocess import check_output
 locale.setlocale(locale.LC_ALL,"")
 
 screen = curses.initscr()
+curses.start_color()
+
+curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_WHITE)
 
 def getTerminalSize():
     import os
@@ -56,7 +59,7 @@ def image2term(image, threshold=128, ratio=None, invert=False):
         tw, th = getTerminalSize()
         tw *= 2
         th *= 2
-        if tw < w:
+        if True:#tw < w:
             ratio = tw / float(w)
             w = tw
             h = int(h * ratio)
@@ -65,9 +68,9 @@ def image2term(image, threshold=128, ratio=None, invert=False):
     x = y = 0
 
     try:
-        i_converted = i.tobytes()
+         i_converted = i.tobytes()
     except AttributeError:
-        i_converted = i.tostring()
+         i_converted = i.tostring()
 
     for pix in i_converted:
         if invert:
@@ -91,31 +94,37 @@ def gui():
     max_y, max_x = screen.getmaxyx()
     active = True
     screen.clear()
-    header = image2term(os.path.expanduser('~') + "/.settings/images/abstract.png")
+    header = image2term(os.path.expanduser('~') + "/.settings/images/splash.png")
     header_lines = header.split("\n")
 
     i = 0
     for line in header_lines:
-        screen.addstr(i, 0, line[:-1])
-        i += 1
+        if i < max_y:
+            screen.addstr(i, 0, line[:-1])
+            i += 1
 
-    i += 2
+    i = int(max_y/float(2))
     try:
         tmux_ls = check_output(["tmux", "ls"]).strip()
-        tmux_ls += "\n\nPRESS space TO LOAD"
     except:
         tmux_ls = "No tmux sessions active!"
         active = False
     tmux_ls_lines = tmux_ls.split("\n")
-    tmux_ls_lines.append("")
-    tmux_ls_lines.append("PRESS q TO EXIT")
 
     y = 0
     for line in tmux_ls_lines:
-        if y == selected and active: line = "x " + line
-        screen.addstr(i, max_x/2-len(line)/2, line)
+        if y == selected and active: screen.addstr(i, max_x/2-len(line)/2, line, curses.color_pair(1) | curses.A_BOLD | curses.A_STANDOUT)
+        else: screen.addstr(i, max_x/2-len(line)/2, line)
         i += 1
         y += 1
+
+    i += 2
+    if active:
+        line = "PRESS space TO LOAD"
+        screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
+        i += 2
+    line = "PRESS q TO EXIT"
+    screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
 
 gui()
 
