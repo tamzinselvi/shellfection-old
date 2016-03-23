@@ -126,6 +126,6 @@ RPROMPT='$(info-git)%f'
 
 # {{{ Welcome prompt if not in TMUX
 if ! { [ -n "$TMUX" ]; } then
-  # shellfection-welcome
+  shellfection-welcome
 fi
 # }}}
