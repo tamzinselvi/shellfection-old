@@ -233,6 +233,22 @@ textwrap center "Finished untracking..."
 nl
 # }}}
 
+# {{{ Submodules
+printf "$Purple"
+printf "$Divider"
+nl
+textwrap center "Installing submodules..."
+nl
+printf "$Divider"
+
+git submodule update --init --recursive
+
+printf "$Green"
+nl
+textwrap center "Finished installing..."
+nl
+# }}}
+
 # {{{ Results
 printf "$White"
 printf "$Divider"
