@@ -44,11 +44,12 @@ def getTerminalSize():
         cr = (env.get('LINES', 25), env.get('COLUMNS', 80))
     return int(cr[1]), int(cr[0])
 
-def image2term(image, threshold=128, ratio=None, invert=False):
-    if image.startswith('http://') or image.startswith('https://'):
-        i = Image.open(StringIO(urllib2.urlopen(image).read())).convert('L')
-    else:
-        i = Image.open(open(image)).convert('L')
+def image2term(image=None, threshold=128, ratio=None, invert=False):
+    #if image.startswith('http://') or image.startswith('https://'):
+    #    i = Image.open(StringIO(urllib2.urlopen(image).read())).convert('L')
+    #else:
+    #    i = Image.open(open(image)).convert('L')
+    i = image
     w, h = i.size
     if ratio:
         w = int(w * ratio)
@@ -87,11 +88,13 @@ def image2term(image, threshold=128, ratio=None, invert=False):
 curses.noecho()
 curses.curs_set(0)
 screen.keypad(1)
+screen.nodelay(1)
 selected = 0
-header = {'image': image2term(os.path.expanduser('~') + "/.settings/images/splash.png")}
+image = Image.open(open(os.path.expanduser('~') + "/.settings/images/splash.png")).convert('L')
+header = {'image': image2term(image)}
 
 def gui(resize=False):
-    if resize: header['image'] = image2term(os.path.expanduser('~') + "/.settings/images/splash.png")
+    if resize: header['image'] = image2term(image)
     max_y, max_x = screen.getmaxyx()
     active = True
     screen.clear()
