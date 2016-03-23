@@ -113,6 +113,7 @@ def gui(resize=False):
 
     y = 0
     for line in tmux_ls_lines:
+        if len(line) > max_x: line = line[:max_x-3] + "..."
         if y == selected and active: screen.addstr(i, max_x/2-len(line)/2, line, curses.color_pair(1) | curses.A_BOLD | curses.A_STANDOUT)
         else: screen.addstr(i, max_x/2-len(line)/2, line)
         i += 1
@@ -121,12 +122,15 @@ def gui(resize=False):
     i += 2
     if active:
         line = "PRESS space TO LOAD"
+        if len(line) > max_x: line = line[:max_x-3] + "..."
         screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
         i += 2
     line = "PRESS c TO CREATE"
+    if len(line) > max_x: line = line[:max_x-3] + "..."
     screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
     i += 2
     line = "PRESS q TO EXIT"
+    if len(line) > max_x: line = line[:max_x-3] + "..."
     screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
 
 gui()
