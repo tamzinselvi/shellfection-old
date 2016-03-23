@@ -129,7 +129,7 @@ def gui(resize=False):
     if len(line) > max_x: line = line[:max_x-3] + "..."
     screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
     i += 2
-    line = "PRESS x TO CREATE"
+    line = "PRESS x TO KILL"
     if len(line) > max_x: line = line[:max_x-3] + "..."
     screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
     i += 2
