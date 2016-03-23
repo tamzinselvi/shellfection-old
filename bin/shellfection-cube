@@ -112,8 +112,8 @@ def __main__(stdscr, projection=False):
         #     break
         event = stdscr.getch()
         if event and event != -1 and event != curses.KEY_RESIZE:
-            screen.clear()
-            screen.refresh()
+            stdscr.clear()
+            stdscr.refresh()
             break
         t = []
         max_y, max_x = stdscr.getmaxyx()
