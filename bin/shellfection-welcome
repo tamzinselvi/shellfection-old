@@ -129,6 +129,10 @@ def gui(resize=False):
     if len(line) > max_x: line = line[:max_x-3] + "..."
     screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
     i += 2
+    line = "PRESS x TO CREATE"
+    if len(line) > max_x: line = line[:max_x-3] + "..."
+    screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
+    i += 2
     line = "PRESS q TO EXIT"
     if len(line) > max_x: line = line[:max_x-3] + "..."
     screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
@@ -164,6 +168,17 @@ while True:
         gui()
     elif event == curses.KEY_RESIZE:
         gui(True)
+    elif event == ord("x"):
+        try:
+            tmux_ls = check_output(["tmux", "ls"]).strip()
+        except:
+            tmux_ls = "No tmux sessions active!"
+        tmux_ls_lines = tmux_ls.split("\n")
+        tmux_load = tmux_ls_lines[selected]
+        m = re.match('([a-zA-Z0-9\-]*):.*', tmux_load)
+        check_output(["tmux", "kill-session", "-t", m.group(1)])
+        if selected > len(tmux_ls_lines) - 2: selected = len(tmux_ls_lines) - 2
+        gui()
     elif event == ord(" "):
         try:
             tmux_ls = check_output(["tmux", "ls"]).strip()
