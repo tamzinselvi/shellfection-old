@@ -44,7 +44,6 @@ def getTerminalSize():
         cr = (env.get('LINES', 25), env.get('COLUMNS', 80))
     return int(cr[1]), int(cr[0])
 
-
 def image2term(image, threshold=128, ratio=None, invert=False):
     if image.startswith('http://') or image.startswith('https://'):
         i = Image.open(StringIO(urllib2.urlopen(image).read())).convert('L')
@@ -89,13 +88,14 @@ curses.noecho()
 curses.curs_set(0)
 screen.keypad(1)
 selected = 0
+header = {'image': image2term(os.path.expanduser('~') + "/.settings/images/splash.png")}
 
-def gui():
+def gui(resize=False):
+    if resize: header['image'] = image2term(os.path.expanduser('~') + "/.settings/images/splash.png")
     max_y, max_x = screen.getmaxyx()
     active = True
     screen.clear()
-    header = image2term(os.path.expanduser('~') + "/.settings/images/splash.png")
-    header_lines = header.split("\n")
+    header_lines = header['image'].split("\n")
 
     i = 0
     for line in header_lines:
@@ -123,6 +123,9 @@ def gui():
         line = "PRESS space TO LOAD"
         screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
         i += 2
+    line = "PRESS c TO CREATE"
+    screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
+    i += 2
     line = "PRESS q TO EXIT"
     screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
 
@@ -134,6 +137,9 @@ while True:
         screen.clear()
         screen.refresh()
         break
+    if event == ord("c"):
+        tmux = check_output(["which", "tmux"]).strip()
+        os.execv(tmux, [tmux])
     elif event == curses.KEY_UP:
         try:
             tmux_ls = check_output(["tmux", "ls"]).strip()
@@ -153,7 +159,7 @@ while True:
         if selected > len(tmux_ls_lines) - 1: selected = 0
         gui()
     elif event == curses.KEY_RESIZE:
-        gui()
+        gui(True)
     elif event == ord(" "):
         try:
             tmux_ls = check_output(["tmux", "ls"]).strip()
