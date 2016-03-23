@@ -4,6 +4,7 @@ import curses
 import math
 from time import sleep
 import locale
+from random import randint
 
 locale.setlocale(locale.LC_ALL,"")
 
@@ -100,8 +101,8 @@ def __main__(stdscr, projection=False):
         curses.init_pair(i + 1, i, -1)
     stdscr.keypad(1)
     max_y, max_x = stdscr.getmaxyx()
-    var_x = {"value": -max_x-max_x+40, "direction": 2}
-    var_y = {"value": max_y - 20, "direction": -1}
+    var_x = {"value": randint(-max_x-max_x+40, -40), "direction": [-2, 2][randint(0, 1)]}
+    var_y = {"value": randint(-40, max_y - 20), "direction": [-1, 1][randint(0, 1)]}
     color_i = 0
     color_direction = 1
     while 1:
