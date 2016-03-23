@@ -4,7 +4,15 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Screensaver commands go here
 PIPES="pipeseroni-pipes"
-CMATRIX="cmatrix -sb"
+
+COLORS=( "red" "green" "yellow" "blue" "magenta" "cyan" "white" "black" )
+COLOR=${COLORS[$RANDOM % ${#COLORS[@]} ]}
+BOLDS=( "" "b" )
+BOLD=${BOLDS[$RANDOM % ${#BOLDS[@]} ]}
+ASYNCS=( "" "a" )
+ASYNC=${ASYNCS[$RANDOM % ${#ASYNCS[@]} ]}
+
+CMATRIX="cmatrix -s$BOLD$ASYNC -C $COLOR"
 
 # Map screensavers here
 SCREENSAVERS=( "$PIPES" "$CMATRIX" )
