@@ -189,7 +189,7 @@ while True:
         if selected > len(tmux_ls_lines) - 2: selected = len(tmux_ls_lines) - 2
         if selected < 0: selected = 0
         gui(redraw_image=True)
-    elif event == ord(" ") or event == curses.KEY_ENTER:
+    elif event == ord(" ") or event == curses.KEY_ENTER or event == ord("\n"):
         try:
             tmux_ls = check_output(["tmux", "ls"]).strip()
         except:
