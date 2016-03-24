@@ -18,8 +18,10 @@ CMATRIX="cmatrix -s$BOLD$ASYNC -C $COLOR"
 
 CUBE="shellfection-cube"
 
+GAMEOFLIFE="shellfection-game-of-life"
+
 # Map screensavers here
-SCREENSAVERS=( "$PIPES" "$CMATRIX" "$CUBE" )
+SCREENSAVERS=( "$PIPES" "$CMATRIX" "$CUBE" "$GAMEOFLIFE" )
 
 # Pick random screensaver from list
 SCREENSAVER=${SCREENSAVERS[$RANDOM % ${#SCREENSAVERS[@]} ]}
