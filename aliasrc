@@ -78,7 +78,7 @@ alias gpom='git push origin master'
 alias gm='git merge'
 alias gmm='git merge --no-ff'
 alias gd=gitdifftig
-alias gl='git log | tig'
+alias gl='tig'
 alias gg='git log --graph --oneline --all'
 
 # rsync aliases

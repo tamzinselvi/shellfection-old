@@ -88,23 +88,23 @@ def image2term(image=None, threshold=128, ratio=None, invert=False):
 curses.noecho()
 curses.curs_set(0)
 screen.keypad(1)
-screen.nodelay(1)
 selected = 0
-image = Image.open(open(os.path.expanduser('~') + "/.settings/images/splash.png")).convert('L')
+image = Image.open(open(os.path.expanduser('~') + "/.settings/images/plurabelle.png")).convert('L')
 header = {'image': image2term(image)}
 
-def gui(resize=False):
+def gui(resize=False, redraw_image=False):
     if resize: header['image'] = image2term(image)
     max_y, max_x = screen.getmaxyx()
     active = True
-    screen.clear()
-    header_lines = header['image'].split("\n")
 
-    i = 0
-    for line in header_lines:
-        if i < max_y:
-            screen.addstr(i, 0, line[:-1])
-            i += 1
+    if redraw_image:
+        screen.clear()
+        header_lines = header['image'].split("\n")
+        i = 0
+        for line in header_lines:
+            if i < max_y:
+                screen.addstr(i, 0, line[:-1])
+                i += 1
 
     i = int(max_y/float(2))
     try:
@@ -140,7 +140,7 @@ def gui(resize=False):
     if len(line) > max_x: line = line[:max_x-3] + "..."
     screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
 
-gui()
+gui(redraw_image=True)
 
 while True:
     event = screen.getch()
@@ -170,7 +170,7 @@ while True:
         if selected > len(tmux_ls_lines) - 1: selected = 0
         gui()
     elif event == curses.KEY_RESIZE:
-        gui(True)
+        gui(resize=True, redraw_image=True)
     elif event == ord("x"):
         try:
             tmux_ls = check_output(["tmux", "ls"]).strip()
@@ -181,7 +181,7 @@ while True:
         m = re.match('([a-zA-Z0-9\-]*):.*', tmux_load)
         check_output(["tmux", "kill-session", "-t", m.group(1)])
         if selected > len(tmux_ls_lines) - 2: selected = len(tmux_ls_lines) - 2
-        gui()
+        gui(redraw_image=True)
     elif event == ord(" "):
         try:
             tmux_ls = check_output(["tmux", "ls"]).strip()

@@ -31,9 +31,6 @@ export EDITOR='vim'
 export PYTHONSTARTUP="$HOME/.pythonrc.py"
 # }}}
 
-# Aliases
-. ~/.aliasrc
-
 # {{{ Autolaunch
 # (( $+commands[TODO] )) && TODO
 # }}}
@@ -123,6 +120,9 @@ RPROMPT='$(info-git)%f'
 # {{{ Local
 . ~/.zshrc.local
 # }}}
+
+# Aliases
+. ~/.aliasrc
 
 # {{{ Welcome prompt if not in TMUX
 if ! { [ -n "$TMUX" ]; } then
