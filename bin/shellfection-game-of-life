@@ -4,9 +4,9 @@
 #
 # A fun screensaver simulating life.
 #
-# phase 1: creation
-# phase 2: life
-# phase 3: destruction
+# phase 1: life
+# phase 2: destruction
+# phase 3: creation
 
 try:
     from PIL import Image
@@ -42,7 +42,33 @@ curses.start_color()
 curses.use_default_colors()
 screen.nodelay(1)
 
-color_pairs = {"index":1}
+color_pairs = {"index":3}
+curses.init_pair(1, 15, 255)
+curses.init_pair(2, 236, 0)
+
+class White:
+    def __init__(self):
+        self.spreadFactor = randint(0, 20)
+        self.symbol = random.choice(string.ascii_letters + string.digits + string.punctuation)
+        self.color_pair = 1
+
+    def render(self, x, y):
+        try:
+            screen.addstr(y, x, self.symbol, curses.color_pair(self.color_pair))
+        except:
+            pass
+
+class Black:
+    def __init__(self):
+        self.spreadFactor = randint(0, 20)
+        self.symbol = random.choice(string.ascii_letters + string.digits + string.punctuation)
+        self.color_pair = 2
+
+    def render(self, x, y):
+        try:
+            screen.addstr(y, x, self.symbol, curses.color_pair(self.color_pair))
+        except:
+            pass
 
 class Color:
     def __init__(self):
@@ -55,43 +81,136 @@ class Color:
         color_pairs["index"] += 1
 
     def render(self, x, y):
-        screen.addstr(y, x, self.symbol, curses.color_pair(self.color_pair))
+        try:
+            screen.addstr(y, x, self.symbol, curses.color_pair(self.color_pair))
+        except:
+            pass
 
-old_timestamp = int(time.time())
-phase = randint(1, 3)
-phase_length = randint(0, 30)
+def color_check(color, spread):
+    if isinstance(color, Color) and not isinstance(spread, Black):
+        return True
+    elif isinstance(color, Black) and not isinstance(spread, White):
+        return True
+    elif isinstance(color, White) and not isinstance(spread, Color):
+        return True
+    return False
+
+phase = 1
 colors = [[None] * 2500 for n in range(2500)]
+old_timestamp = int(time.time())
+life_time = None
 
 while True:
+    all_black = True
+    all_white = True
+    all_color = True
+    max_y, max_x = screen.getmaxyx()
+    timestamp = int(time.time())
     event = screen.getch()
     if event and event != -1 and event != curses.KEY_RESIZE:
         screen.clear()
         screen.refresh()
         break
-    timestamp = int(time.time())
-    max_y, max_x = screen.getmaxyx()
-    for row_index in range(0, max_y - 1):
+    elif event == curses.KEY_RESIZE:
+        colors_copy = [[None] * 2500 for n in range(2500)]
+        for row_index in range(0, max_y):
+            for column_index in range(0, max_x):
+                colors_copy[row_index][column_index] = colors[row_index][column_index]
+        for row_index in range(0, max_y):
+            colors[row_index] = colors_copy[row_index]
+    for row_index in range(0, max_y):
         row = colors[row_index]
-        for color_index in range(0, max_x - 1):
+        for color_index in range(0, max_x):
+            if isinstance(row[color_index], Color):
+                all_black = False
+                all_white = False
+            elif isinstance(row[color_index], Black):
+                all_white = False
+                all_color = False
+            elif isinstance(row[color_index], White):
+                all_black = False
+                all_color = False
             if row[color_index]:
-                row[color_index].render(color_index, row_index)
+                if phase == 1 and randint(1, 50) == 1 and isinstance(colors[row_index][color_index], White):
+                    colors[row_index][color_index] = Color()
+                    all_black = False
+                    all_white = False
+                    colors[row_index][color_index].render(color_index, row_index)
+                elif phase == 2 and randint(1, 50) == 1 and isinstance(colors[row_index][color_index], Color):
+                    colors[row_index][color_index] = Black()
+                    all_color = False
+                    all_white = False
+                    colors[row_index][color_index].render(color_index, row_index)
+                elif phase == 3 and randint(1, 50) == 1 and isinstance(colors[row_index][color_index], Black):
+                    colors[row_index][color_index] = White()
+                    all_color = False
+                    all_black = False
+                    colors[row_index][color_index].render(color_index, row_index)
                 spread = int((randint(1, 5) * row[color_index].spreadFactor) / 20.0)
                 direction = randint(1, 4)
                 for i in range(0, spread):
-                    if direction == 1 and row_index-1 >= 0:
-                        colors[row_index-1][color_index] = row[color_index]
+                    if direction == 1 and row_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index-1][color_index]):
+                        if isinstance(colors[row_index][color_index], Color):
+                            all_black = False
+                            all_white = False
+                        elif isinstance(colors[row_index][color_index], Black):
+                            all_white = False
+                            all_color = False
+                        elif isinstance(colors[row_index][color_index], White):
+                            all_black = False
+                            all_color = False
+                        colors[row_index-1][color_index] = colors[row_index][color_index]
                         colors[row_index-1][color_index].render(color_index, row_index-1)
-                    elif direction == 2 and row_index+1 < max_y:
-                        colors[row_index+1][color_index] = row[color_index]
+                    elif direction == 2 and row_index+1 < max_y and color_check(colors[row_index][color_index], colors[row_index+1][color_index]):
+                        if isinstance(colors[row_index][color_index], Color):
+                            all_black = False
+                            all_white = False
+                        elif isinstance(colors[row_index][color_index], Black):
+                            all_white = False
+                            all_color = False
+                        elif isinstance(colors[row_index][color_index], White):
+                            all_black = False
+                            all_color = False
+                        colors[row_index+1][color_index] = colors[row_index][color_index]
                         colors[row_index+1][color_index].render(color_index, row_index+1)
-                    elif direction == 3 and color_index-1 >= 0:
-                        colors[row_index][color_index-1] = row[color_index]
+                    elif direction == 3 and color_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index][color_index-1]):
+                        if isinstance(colors[row_index][color_index], Color):
+                            all_black = False
+                            all_white = False
+                        elif isinstance(colors[row_index][color_index], Black):
+                            all_white = False
+                            all_color = False
+                        elif isinstance(colors[row_index][color_index], White):
+                            all_black = False
+                            all_color = False
+                        colors[row_index][color_index-1] = colors[row_index][color_index]
                         colors[row_index][color_index-1].render(color_index-1, row_index)
-                    elif direction == 4 and color_index+1 < max_x:
-                        colors[row_index][color_index+1] = row[color_index]
+                    elif direction == 4 and color_index+1 < max_x and color_check(colors[row_index][color_index], colors[row_index][color_index+1]):
+                        if isinstance(colors[row_index][color_index], Color):
+                            all_black = False
+                            all_white = False
+                        elif isinstance(colors[row_index][color_index], Black):
+                            all_white = False
+                            all_color = False
+                        elif isinstance(colors[row_index][color_index], White):
+                            all_black = False
+                            all_color = False
+                        colors[row_index][color_index+1] = colors[row_index][color_index]
                         colors[row_index][color_index+1].render(color_index+1, row_index)
             else:
-                if randint(1, 100) == 1:
+                if randint(1, 50) == 1:
                     row[color_index] = Color()
                     row[color_index].render(color_index, row_index)
+                    all_color = False
+                    all_black = False
+                    all_white = False
+    if all_color or all_black or all_white:
+        if all_color and not life_time:
+            life_time = randint(5,30)
+            old_timestamp = timestamp
+        elif all_black or all_white or all_color and (timestamp - old_timestamp) > life_time:
+            life_time = None
+            phase += 1
+            if phase > 3: phase = 1
+
     screen.refresh()

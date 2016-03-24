@@ -92,6 +92,12 @@ selected = 0
 image = Image.open(open(os.path.expanduser('~') + "/.settings/images/plurabelle.png")).convert('L')
 header = {'image': image2term(image)}
 
+def addstr(y, x, string, attr = 1):
+    try:
+        screen.addstr(y, x, string, attr)
+    except:
+        pass
+
 def gui(resize=False, redraw_image=False):
     if resize: header['image'] = image2term(image)
     max_y, max_x = screen.getmaxyx()
@@ -103,7 +109,7 @@ def gui(resize=False, redraw_image=False):
         i = 0
         for line in header_lines:
             if i < max_y:
-                screen.addstr(i, 0, line[:-1])
+                addstr(i, 0, line[:-1])
                 i += 1
 
     i = int(max_y/float(2))
@@ -117,28 +123,28 @@ def gui(resize=False, redraw_image=False):
     y = 0
     for line in tmux_ls_lines:
         if len(line) > max_x: line = line[:max_x-3] + "..."
-        if y == selected: screen.addstr(i, max_x/2-len(line)/2, line, curses.color_pair(1) | curses.A_BOLD | curses.A_STANDOUT)
-        else: screen.addstr(i, max_x/2-len(line)/2, line)
+        if y == selected: addstr(i, max_x/2-len(line)/2, line, curses.color_pair(1) | curses.A_BOLD | curses.A_STANDOUT)
+        else: addstr(i, max_x/2-len(line)/2, line)
         i += 1
         y += 1
 
     i += 2
     if active:
-        line = "PRESS space TO LOAD"
+        line = "PRESS space/enter TO LOAD"
         if len(line) > max_x: line = line[:max_x-3] + "..."
-        screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
+        addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
         i += 2
     line = "PRESS c TO CREATE"
     if len(line) > max_x: line = line[:max_x-3] + "..."
-    screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
+    addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
     i += 2
     line = "PRESS x TO KILL"
     if len(line) > max_x: line = line[:max_x-3] + "..."
-    screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
+    addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
     i += 2
     line = "PRESS q TO EXIT"
     if len(line) > max_x: line = line[:max_x-3] + "..."
-    screen.addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
+    addstr(i, max_x/2-len(line)/2, line, curses.A_BOLD | curses.A_STANDOUT)
 
 gui(redraw_image=True)
 
@@ -159,7 +165,7 @@ while True:
         tmux_ls_lines = tmux_ls.split("\n")
         selected -= 1
         if selected < 0: selected = len(tmux_ls_lines) - 1
-        gui(redraw_image=True)
+        gui()
     elif event == curses.KEY_DOWN:
         try:
             tmux_ls = check_output(["tmux", "ls"]).strip()
@@ -168,7 +174,7 @@ while True:
         tmux_ls_lines = tmux_ls.split("\n")
         selected += 1
         if selected > len(tmux_ls_lines) - 1: selected = 0
-        gui(redraw_image=True)
+        gui()
     elif event == curses.KEY_RESIZE:
         gui(resize=True, redraw_image=True)
     elif event == ord("x"):
@@ -183,7 +189,7 @@ while True:
         if selected > len(tmux_ls_lines) - 2: selected = len(tmux_ls_lines) - 2
         if selected < 0: selected = 0
         gui(redraw_image=True)
-    elif event == ord(" "):
+    elif event == ord(" ") or event == curses.KEY_ENTER:
         try:
             tmux_ls = check_output(["tmux", "ls"]).strip()
         except:
