@@ -20,7 +20,7 @@ locale.setlocale(locale.LC_ALL,"")
 screen = curses.initscr()
 curses.start_color()
 
-curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_WHITE)
+curses.init_pair(1, 232, curses.COLOR_WHITE)
 
 def getTerminalSize():
     import os
@@ -117,7 +117,7 @@ def gui(resize=False, redraw_image=False):
     y = 0
     for line in tmux_ls_lines:
         if len(line) > max_x: line = line[:max_x-3] + "..."
-        if y == selected and active: screen.addstr(i, max_x/2-len(line)/2, line, curses.color_pair(1) | curses.A_BOLD | curses.A_STANDOUT)
+        if y == selected: screen.addstr(i, max_x/2-len(line)/2, line, curses.color_pair(1) | curses.A_BOLD | curses.A_STANDOUT)
         else: screen.addstr(i, max_x/2-len(line)/2, line)
         i += 1
         y += 1
@@ -159,7 +159,7 @@ while True:
         tmux_ls_lines = tmux_ls.split("\n")
         selected -= 1
         if selected < 0: selected = len(tmux_ls_lines) - 1
-        gui()
+        gui(redraw_image=True)
     elif event == curses.KEY_DOWN:
         try:
             tmux_ls = check_output(["tmux", "ls"]).strip()
@@ -168,7 +168,7 @@ while True:
         tmux_ls_lines = tmux_ls.split("\n")
         selected += 1
         if selected > len(tmux_ls_lines) - 1: selected = 0
-        gui()
+        gui(redraw_image=True)
     elif event == curses.KEY_RESIZE:
         gui(resize=True, redraw_image=True)
     elif event == ord("x"):
@@ -181,6 +181,7 @@ while True:
         m = re.match('([a-zA-Z0-9\-]*):.*', tmux_load)
         check_output(["tmux", "kill-session", "-t", m.group(1)])
         if selected > len(tmux_ls_lines) - 2: selected = len(tmux_ls_lines) - 2
+        if selected < 0: selected = 0
         gui(redraw_image=True)
     elif event == ord(" "):
         try:
