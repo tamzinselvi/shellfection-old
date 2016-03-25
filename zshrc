@@ -113,10 +113,6 @@ RPROMPT='$(info-git)%f'
 # }}}
 # }}}
 
-# {{{ oh-my-zsh
-. ~/.zshrc.omz
-# }}}
-
 # {{{ Local
 . ~/.zshrc.local
 # }}}

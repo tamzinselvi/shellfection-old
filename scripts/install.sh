@@ -148,27 +148,6 @@ if [ "$SHELL" != "$( which zsh )" ]; then
       [Nn]* ) break;;
       * ) textwrap center "Please answer yes or no.";;
     esac
-# {{{ Link Setting Files
-printf "$Purple"
-printf "$Divider"
-nl
-textwrap center "Linking settings..."
-nl
-printf "$Divider"
-nl
-
-for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.local zshrc.omz aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
-  rm ~/.$file > /dev/null 2>&1
-  ln $file ~/.$file
-  printf "$Yellow"
-  textwrap center "Linked $file to ~/.$file"
-done
-
-printf "$Green"
-nl
-textwrap center "Finished linking..."
-nl
-# }}}
   done
 fi
 # }}}
@@ -200,7 +179,7 @@ nl
 printf "$Divider"
 nl
 
-for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.omz zshrc.local aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
+for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.local aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
   rm ~/.$file > /dev/null 2>&1
   ln $file ~/.$file
   printf "$Yellow"
