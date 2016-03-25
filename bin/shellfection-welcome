@@ -121,6 +121,10 @@ def gui(resize=False, redraw_image=False):
     except:
         tmux_ls = "No tmux sessions active!"
         active = False
+
+    pattern = re.compile("no server running on.*$")
+    if pattern.match(tmux_ls):
+        active = False
     tmux_ls_lines = tmux_ls.split("\n")
 
     y = 0
@@ -191,13 +195,16 @@ while True:
             tmux_ls = p.stdout.read().strip()
         except:
             tmux_ls = "No tmux sessions active!"
-        tmux_ls_lines = tmux_ls.split("\n")
-        tmux_load = tmux_ls_lines[selected]
-        m = re.match('([a-zA-Z0-9\-]*):.*', tmux_load)
-        check_output(["tmux", "kill-session", "-t", m.group(1)])
-        if selected > len(tmux_ls_lines) - 2: selected = len(tmux_ls_lines) - 2
-        if selected < 0: selected = 0
-        gui(redraw_image=True)
+
+        pattern = re.compile("no server running on.*$")
+        if not pattern.match(tmux_ls):
+            tmux_ls_lines = tmux_ls.split("\n")
+            tmux_load = tmux_ls_lines[selected]
+            m = re.match('([a-zA-Z0-9\-]*):.*', tmux_load)
+            check_output(["tmux", "kill-session", "-t", m.group(1)])
+            if selected > len(tmux_ls_lines) - 2: selected = len(tmux_ls_lines) - 2
+            if selected < 0: selected = 0
+            gui(redraw_image=True)
     elif event == ord(" ") or event == curses.KEY_ENTER or event == ord("\n"):
         try:
             cmd = 'tmux ls'
@@ -205,8 +212,11 @@ while True:
             tmux_ls = p.stdout.read().strip()
         except:
             tmux_ls = "No tmux sessions active!"
-        tmux_ls_lines = tmux_ls.split("\n")
-        tmux_load = tmux_ls_lines[selected]
-        m = re.match('([a-zA-Z0-9\-]*):.*', tmux_load)
-        tmux = check_output(["which", "tmux"]).strip()
-        os.execv(tmux, [tmux, "attach", "-t", m.group(1)])
+
+        pattern = re.compile("no server running on.*$")
+        if not pattern.match(tmux_ls):
+            tmux_ls_lines = tmux_ls.split("\n")
+            tmux_load = tmux_ls_lines[selected]
+            m = re.match('([a-zA-Z0-9\-]*):.*', tmux_load)
+            tmux = check_output(["which", "tmux"]).strip()
+            os.execv(tmux, [tmux, "attach", "-t", m.group(1)])
