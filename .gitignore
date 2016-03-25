@@ -4,3 +4,4 @@ vimrc.bundles.local
 vimrc.local
 zshrc.local
 aliasrc.local
+images/*

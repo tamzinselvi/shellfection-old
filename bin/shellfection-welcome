@@ -16,6 +16,7 @@ import re
 from subprocess import check_output
 from subprocess import Popen, PIPE, STDOUT
 import os
+import random
 
 os.system('stty -g > ~/.currentTtySettings')
 
@@ -93,7 +94,12 @@ curses.noecho()
 curses.curs_set(0)
 screen.keypad(1)
 selected = 0
-image = Image.open(open(os.path.expanduser('~') + "/.settings/images/plurabelle.png")).convert('L')
+d = os.listdir(os.path.expanduser('~') + "/.settings/images")
+pattern = re.compile(".*(jpg|png)")
+d = [f for f in d if pattern.match(f)]
+f = random.choice(d)
+
+image = Image.open(open(os.path.expanduser('~') + "/.settings/images/" + f)).convert('L')
 header = {'image': image2term(image)}
 
 def addstr(y, x, string, attr = 1):
