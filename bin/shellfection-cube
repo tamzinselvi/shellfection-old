@@ -5,6 +5,9 @@ import math
 from time import sleep
 import locale
 from random import randint
+import os
+
+os.system('stty -g > ~/.currentTtySettings')
 
 locale.setlocale(locale.LC_ALL,"")
 
@@ -184,3 +187,5 @@ if __name__ == '__main__':
     if '-p' in argv:
         projection = True
     curses.wrapper(__main__, projection)
+
+os.system('stty `cat ~/.currentTtySettings`')

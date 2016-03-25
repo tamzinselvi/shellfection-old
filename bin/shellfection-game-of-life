@@ -27,6 +27,9 @@ import time
 from random import randint
 import random
 import string
+import os
+
+os.system('stty -g > ~/.currentTtySettings')
 
 global color_pairs
 
@@ -214,3 +217,5 @@ while True:
             if phase > 3: phase = 1
 
     screen.refresh()
+
+os.system('stty `cat ~/.currentTtySettings`')

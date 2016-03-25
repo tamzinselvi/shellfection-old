@@ -15,6 +15,9 @@ import locale
 import re
 from subprocess import check_output
 from subprocess import Popen, PIPE, STDOUT
+import os
+
+os.system('stty -g > ~/.currentTtySettings')
 
 locale.setlocale(locale.LC_ALL,"")
 
@@ -221,3 +224,6 @@ while True:
             m = re.match('([a-zA-Z0-9\-]*):.*', tmux_load)
             tmux = check_output(["which", "tmux"]).strip()
             os.execv(tmux, [tmux, "attach", "-t", m.group(1)])
+
+
+os.system('stty `cat ~/.currentTtySettings`')
