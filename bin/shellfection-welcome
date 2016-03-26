@@ -116,7 +116,31 @@ def gui(resize=False, redraw_image=False):
     if redraw_image:
         screen.clear()
         header_lines = header['image'].split("\n")
-        i = 0
+        all_pad = True
+        pad = 0
+        for x in range(0, len(header_lines)):
+            if all_pad:
+                if header_lines[x].strip() == "":
+                    pad += 1
+                else:
+                    all_pad = False
+        header_lines = header_lines[pad:]
+        all_pad = True
+        pad = 0
+        for x in reversed(range(0, len(header_lines))):
+            if all_pad:
+                if header_lines[x].strip() == "":
+                    pad += 1
+                else:
+                    all_pad = False
+        if pad < 0: header_lines = header_lines[:-pad]
+        if len(header_lines) < max_y:
+            i = int((max_y-len(header_lines))/2.0)
+        else:
+            if len(header_lines) > max_y:
+                header_lines = header_lines[int((len(header_lines)-max_y)/2.0):]
+            i = 0
+
         for line in header_lines:
             if i < max_y:
                 addstr(i, 0, line[:-1])

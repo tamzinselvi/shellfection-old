@@ -152,7 +152,7 @@ while True:
                 spread = int((randint(1, 5) * row[color_index].spreadFactor) / 20.0)
                 direction = randint(1, 4)
                 for i in range(0, spread):
-                    if direction == 1 and row_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index-1][color_index]):
+                    if direction == 1 and row_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index-1][color_index]) and not colors[row_index-1][color_index] is colors[row_index][color_index]:
                         if isinstance(colors[row_index][color_index], Color):
                             all_black = False
                             all_white = False
@@ -164,7 +164,7 @@ while True:
                             all_color = False
                         colors[row_index-1][color_index] = colors[row_index][color_index]
                         colors[row_index-1][color_index].render(color_index, row_index-1)
-                    elif direction == 2 and row_index+1 < max_y and color_check(colors[row_index][color_index], colors[row_index+1][color_index]):
+                    elif direction == 2 and row_index+1 < max_y and color_check(colors[row_index][color_index], colors[row_index+1][color_index]) and not colors[row_index+1][color_index] is colors[row_index][color_index]:
                         if isinstance(colors[row_index][color_index], Color):
                             all_black = False
                             all_white = False
@@ -176,7 +176,7 @@ while True:
                             all_color = False
                         colors[row_index+1][color_index] = colors[row_index][color_index]
                         colors[row_index+1][color_index].render(color_index, row_index+1)
-                    elif direction == 3 and color_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index][color_index-1]):
+                    elif direction == 3 and color_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index][color_index-1]) and not colors[row_index][color_index-1] is colors[row_index][color_index]:
                         if isinstance(colors[row_index][color_index], Color):
                             all_black = False
                             all_white = False
@@ -188,7 +188,7 @@ while True:
                             all_color = False
                         colors[row_index][color_index-1] = colors[row_index][color_index]
                         colors[row_index][color_index-1].render(color_index-1, row_index)
-                    elif direction == 4 and color_index+1 < max_x and color_check(colors[row_index][color_index], colors[row_index][color_index+1]):
+                    elif direction == 4 and color_index+1 < max_x and color_check(colors[row_index][color_index], colors[row_index][color_index+1]) and not colors[row_index][color_index+1] is colors[row_index][color_index]:
                         if isinstance(colors[row_index][color_index], Color):
                             all_black = False
                             all_white = False
@@ -200,7 +200,7 @@ while True:
                             all_color = False
                         colors[row_index][color_index+1] = colors[row_index][color_index]
                         colors[row_index][color_index+1].render(color_index+1, row_index)
-            else:
+            elif phase == 1:
                 if randint(1, 50) == 1:
                     row[color_index] = Color()
                     row[color_index].render(color_index, row_index)
