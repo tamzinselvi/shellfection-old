@@ -45,15 +45,29 @@ curses.start_color()
 curses.use_default_colors()
 screen.nodelay(1)
 
-color_pairs = {"index":3}
+color_pairs = {"index":4}
 curses.init_pair(1, 15, 255)
 curses.init_pair(2, 236, 0)
+curses.init_pair(3, 15, 94)
 
 class White:
     def __init__(self):
-        self.spreadFactor = randint(0, 20)
+        self.spreadFactor = randint(0, 300)
         self.symbol = random.choice(string.ascii_letters + string.digits + string.punctuation)
         self.color_pair = 1
+        self.c_type = -20
+
+    def render(self, x, y):
+        try:
+            screen.addstr(y, x, self.symbol, curses.color_pair(self.color_pair))
+        except:
+            pass
+
+class VirusExcrement:
+    def __init__(self):
+        self.color_pair = 3
+        self.symbol = "~"
+        self.c_type = 12
 
     def render(self, x, y):
         try:
@@ -63,9 +77,10 @@ class White:
 
 class Black:
     def __init__(self):
-        self.spreadFactor = randint(0, 20)
+        self.spreadFactor = randint(100, 200)
         self.symbol = random.choice(string.ascii_letters + string.digits + string.punctuation)
         self.color_pair = 2
+        self.c_type = -20
 
     def render(self, x, y):
         try:
@@ -75,13 +90,14 @@ class Black:
 
 class Color:
     def __init__(self):
-        self.spreadFactor = randint(0, 20)
+        self.spreadFactor = randint(80, 300)
         self.symbol = random.choice(string.ascii_letters + string.digits + string.punctuation)
         fgColor = randint(0, 255)
         bgColor = randint(0, 255)
         curses.init_pair(color_pairs["index"], fgColor, bgColor)
         self.color_pair = color_pairs["index"]
         color_pairs["index"] += 1
+        self.c_type = randint(0, 11)
 
     def render(self, x, y):
         try:
@@ -89,12 +105,22 @@ class Color:
         except:
             pass
 
+def clear(x, y):
+        try:
+            screen.addstr(y, x, "*")
+        except:
+            pass
+
+excrement = VirusExcrement()
+
 def color_check(color, spread):
-    if isinstance(color, Color) and not isinstance(spread, Black):
+    if isinstance(color, Color) and (isinstance(spread, Color) or isinstance(spread, White) or not spread): can_spread = (spread == None) or (phase == 2 and spread.c_type != 11 and spread.c_type != 12) or (color.c_type == 11) or (not isinstance(spread, VirusExcrement) and spread.c_type != 11 and (color.c_type != 0 and spread.c_type != 10) and (color.c_type - 1 != spread.c_type) and (color.c_type != spread.c_type))
+    else: can_spread = False
+    if isinstance(color, Color) and not isinstance(spread, Black) and can_spread:
         return True
     elif isinstance(color, Black) and not isinstance(spread, White):
         return True
-    elif isinstance(color, White) and not isinstance(spread, Color):
+    elif isinstance(color, White) and not isinstance(spread, Color) and not isinstance(spread, VirusExcrement):
         return True
     return False
 
@@ -134,74 +160,103 @@ while True:
                 all_black = False
                 all_color = False
             if row[color_index]:
-                if phase == 1 and randint(1, 50) == 1 and isinstance(colors[row_index][color_index], White):
+                if phase == 1 and randint(1, 10000) == 1 and isinstance(colors[row_index][color_index], White):
                     colors[row_index][color_index] = Color()
                     all_black = False
                     all_white = False
                     colors[row_index][color_index].render(color_index, row_index)
-                elif phase == 2 and randint(1, 50) == 1 and isinstance(colors[row_index][color_index], Color):
+                elif phase == 2 and randint(1, 10000) == 1 and isinstance(colors[row_index][color_index], Color):
                     colors[row_index][color_index] = Black()
                     all_color = False
                     all_white = False
                     colors[row_index][color_index].render(color_index, row_index)
-                elif phase == 3 and randint(1, 50) == 1 and isinstance(colors[row_index][color_index], Black):
+                elif phase == 3 and randint(1, 10000) == 1 and isinstance(colors[row_index][color_index], Black):
                     colors[row_index][color_index] = White()
                     all_color = False
                     all_black = False
                     colors[row_index][color_index].render(color_index, row_index)
-                spread = int((randint(1, 5) * row[color_index].spreadFactor) / 20.0)
-                direction = randint(1, 4)
-                for i in range(0, spread):
-                    if direction == 1 and row_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index-1][color_index]) and not colors[row_index-1][color_index] is colors[row_index][color_index]:
-                        if isinstance(colors[row_index][color_index], Color):
-                            all_black = False
-                            all_white = False
-                        elif isinstance(colors[row_index][color_index], Black):
-                            all_white = False
-                            all_color = False
-                        elif isinstance(colors[row_index][color_index], White):
-                            all_black = False
-                            all_color = False
+                if colors[row_index][color_index].c_type == 12:
+                    pass
+                    all_black = False
+                    all_white = False
+                elif colors[row_index][color_index].c_type == 11:
+                    direction = randint(1, 4)
+                    if direction == 1 and row_index-1 >= 0 and (not isinstance(colors[row_index-1][color_index], VirusExcrement) and color_check(colors[row_index][color_index], colors[row_index-1][color_index])):
                         colors[row_index-1][color_index] = colors[row_index][color_index]
                         colors[row_index-1][color_index].render(color_index, row_index-1)
-                    elif direction == 2 and row_index+1 < max_y and color_check(colors[row_index][color_index], colors[row_index+1][color_index]) and not colors[row_index+1][color_index] is colors[row_index][color_index]:
-                        if isinstance(colors[row_index][color_index], Color):
-                            all_black = False
-                            all_white = False
-                        elif isinstance(colors[row_index][color_index], Black):
-                            all_white = False
-                            all_color = False
-                        elif isinstance(colors[row_index][color_index], White):
-                            all_black = False
-                            all_color = False
+                        colors[row_index][color_index] = excrement
+                        colors[row_index][color_index].render(color_index, row_index)
+                    elif direction == 2 and row_index+1 < max_y and (not isinstance(colors[row_index+1][color_index], VirusExcrement) and color_check(colors[row_index][color_index], colors[row_index+1][color_index])):
                         colors[row_index+1][color_index] = colors[row_index][color_index]
                         colors[row_index+1][color_index].render(color_index, row_index+1)
-                    elif direction == 3 and color_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index][color_index-1]) and not colors[row_index][color_index-1] is colors[row_index][color_index]:
-                        if isinstance(colors[row_index][color_index], Color):
-                            all_black = False
-                            all_white = False
-                        elif isinstance(colors[row_index][color_index], Black):
-                            all_white = False
-                            all_color = False
-                        elif isinstance(colors[row_index][color_index], White):
-                            all_black = False
-                            all_color = False
+                        colors[row_index][color_index] = excrement
+                        colors[row_index][color_index].render(color_index, row_index)
+                    elif direction == 3 and color_index-1 >= 0 and (not isinstance(colors[row_index][color_index-1], VirusExcrement) and color_check(colors[row_index][color_index], colors[row_index][color_index-1])):
                         colors[row_index][color_index-1] = colors[row_index][color_index]
                         colors[row_index][color_index-1].render(color_index-1, row_index)
-                    elif direction == 4 and color_index+1 < max_x and color_check(colors[row_index][color_index], colors[row_index][color_index+1]) and not colors[row_index][color_index+1] is colors[row_index][color_index]:
-                        if isinstance(colors[row_index][color_index], Color):
-                            all_black = False
-                            all_white = False
-                        elif isinstance(colors[row_index][color_index], Black):
-                            all_white = False
-                            all_color = False
-                        elif isinstance(colors[row_index][color_index], White):
-                            all_black = False
-                            all_color = False
+                        colors[row_index][color_index] = excrement
+                        colors[row_index][color_index].render(color_index, row_index)
+                    elif direction == 4 and color_index+1 < max_x and (not isinstance(colors[row_index][color_index+1], VirusExcrement) and color_check(colors[row_index][color_index], colors[row_index][color_index+1])):
                         colors[row_index][color_index+1] = colors[row_index][color_index]
                         colors[row_index][color_index+1].render(color_index+1, row_index)
+                        colors[row_index][color_index] = excrement
+                        colors[row_index][color_index].render(color_index, row_index)
+                    all_black = False
+                    all_white = False
+                else:
+                    spread = int((4 * row[color_index].spreadFactor) / 300.0)
+                    direction = randint(1, 4)
+                    for i in range(0, spread):
+                        if direction == 1 and row_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index-1][color_index]) and not colors[row_index-1][color_index] is colors[row_index][color_index]:
+                            if isinstance(colors[row_index][color_index], Color):
+                                all_black = False
+                                all_white = False
+                            elif isinstance(colors[row_index][color_index], Black):
+                                all_white = False
+                                all_color = False
+                            elif isinstance(colors[row_index][color_index], White):
+                                all_black = False
+                                all_color = False
+                            colors[row_index-1][color_index] = colors[row_index][color_index]
+                            colors[row_index-1][color_index].render(color_index, row_index-1)
+                        elif direction == 2 and row_index+1 < max_y and color_check(colors[row_index][color_index], colors[row_index+1][color_index]) and not colors[row_index+1][color_index] is colors[row_index][color_index]:
+                            if isinstance(colors[row_index][color_index], Color):
+                                all_black = False
+                                all_white = False
+                            elif isinstance(colors[row_index][color_index], Black):
+                                all_white = False
+                                all_color = False
+                            elif isinstance(colors[row_index][color_index], White):
+                                all_black = False
+                                all_color = False
+                            colors[row_index+1][color_index] = colors[row_index][color_index]
+                            colors[row_index+1][color_index].render(color_index, row_index+1)
+                        elif direction == 3 and color_index-1 >= 0 and color_check(colors[row_index][color_index], colors[row_index][color_index-1]) and not colors[row_index][color_index-1] is colors[row_index][color_index]:
+                            if isinstance(colors[row_index][color_index], Color):
+                                all_black = False
+                                all_white = False
+                            elif isinstance(colors[row_index][color_index], Black):
+                                all_white = False
+                                all_color = False
+                            elif isinstance(colors[row_index][color_index], White):
+                                all_black = False
+                                all_color = False
+                            colors[row_index][color_index-1] = colors[row_index][color_index]
+                            colors[row_index][color_index-1].render(color_index-1, row_index)
+                        elif direction == 4 and color_index+1 < max_x and color_check(colors[row_index][color_index], colors[row_index][color_index+1]) and not colors[row_index][color_index+1] is colors[row_index][color_index]:
+                            if isinstance(colors[row_index][color_index], Color):
+                                all_black = False
+                                all_white = False
+                            elif isinstance(colors[row_index][color_index], Black):
+                                all_white = False
+                                all_color = False
+                            elif isinstance(colors[row_index][color_index], White):
+                                all_black = False
+                                all_color = False
+                            colors[row_index][color_index+1] = colors[row_index][color_index]
+                            colors[row_index][color_index+1].render(color_index+1, row_index)
             elif phase == 1:
-                if randint(1, 50) == 1:
+                if randint(1, 10000) == 1:
                     row[color_index] = Color()
                     row[color_index].render(color_index, row_index)
                     all_color = False
