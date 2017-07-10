@@ -1,3 +1,4 @@
 # vim: filetype=sh
 
 # Local settings go here
+export YOUTUBE_PLAYLIST="https://www.youtube.com/playlist?list=PLw4Qfjd_e2_3AQvEWthT8QlkBrGyukq5b"
