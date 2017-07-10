@@ -96,18 +96,18 @@ for pkg in pillow drawille; do
 done
 # }}}
 
-# {{{ Install asciiquariam
+# {{{ Install asciiquarium
 printf "$Purple"
 printf "$Divider"
 nl
-textwrap center "Checking for asciiquariam..."
+textwrap center "Checking for asciiquarium..."
 nl
 printf "$Divider"
 
-if ! type asciiquariam > /dev/null 2>&1; then
+if type asciiquarium > /dev/null 2>&1; then
   printf "$Yellow"
   nl
-  textwrap center "asciiquariam not found, installing..."
+  textwrap center "asciiquarium not found, installing..."
   nl
   wget http://www.robobunny.com/projects/asciiquarium/asciiquarium.tar.gz
   tar -zxvf asciiquarium.tar.gz
@@ -116,7 +116,7 @@ if ! type asciiquariam > /dev/null 2>&1; then
   sudo cp asciiquarium /usr/local/bin/asciiquarium
   sudo cpan Term::Animation
   cd ../
-  rm -rf asciiquariam_1.1./
+  rm -rf asciiquarium_1.1/ asciiquarium.tar.gz
   let Success=Success+1
 else
   printf "$Green"
