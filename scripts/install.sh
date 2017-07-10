@@ -71,7 +71,7 @@ nl
 # }}}
 
 # {{{ Install PIP Packages
-for pkg in pillow drawille asciiquariam; do
+for pkg in pillow drawille; do
   printf "$Purple"
   printf "$Divider"
   nl
@@ -94,6 +94,37 @@ for pkg in pillow drawille asciiquariam; do
     let NoChanges=NoChanges+1
   fi
 done
+# }}}
+
+# {{{ Install asciiquariam
+printf "$Purple"
+printf "$Divider"
+nl
+textwrap center "Checking for asciiquariam..."
+nl
+printf "$Divider"
+
+if ! type asciiquariam > /dev/null 2>&1; then
+  printf "$Yellow"
+  nl
+  textwrap center "asciiquariam not found, installing..."
+  nl
+  wget http://www.robobunny.com/projects/asciiquarium/asciiquarium.tar.gz
+  tar -zxvf asciiquarium.tar.gz
+  cd asciiquarium_1.1/
+  chmod +x asciiquarium
+  sudo cp asciiquarium /usr/local/bin/asciiquarium
+  sudo cpan Term::Animation
+  cd ../
+  rm -rf asciiquariam_1.1./
+  let Success=Success+1
+else
+  printf "$Green"
+  nl
+  textwrap center "brew is already installed, continuing..."
+  nl
+  let NoChanges=NoChanges+1
+fi
 # }}}
 
 # {{{ Install Vundle
