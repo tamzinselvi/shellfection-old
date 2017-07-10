@@ -23,7 +23,7 @@ fi
 # }}}
 
 # {{{ Install Brew Packages
-for pkg in tmux reattach-to-user-namespace the_silver_searcher cmatrix vim zsh wget tig pandoc lynx bash python; do
+for pkg in tmux reattach-to-user-namespace the_silver_searcher cmatrix vim zsh wget tig pandoc lynx bash python "mpv --with-libcaca"; do
   printf "$Purple"
   printf "$Divider"
   nl

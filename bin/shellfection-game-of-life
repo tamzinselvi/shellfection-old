@@ -175,7 +175,15 @@ while True:
                     all_color = False
                     all_black = False
                     colors[row_index][color_index].render(color_index, row_index)
-                if colors[row_index][color_index].c_type == 12:
+                if (row_index-1 < 0 or isinstance(colors[row_index-1][color_index], VirusExcrement)) and \
+                     (row_index+1 >= max_y or isinstance(colors[row_index+1][color_index], VirusExcrement)) and \
+                     (color_index-1 < 0 or isinstance(colors[row_index][color_index-1], VirusExcrement)) and \
+                     (color_index+1 >= max_x or isinstance(colors[row_index][color_index+1], VirusExcrement)):
+                            colors[row_index][color_index] = excrement
+                            all_black = False
+                            all_white = False
+                            colors[row_index][color_index].render(row_index, color_index)
+                elif colors[row_index][color_index].c_type == 12:
                     pass
                     all_black = False
                     all_white = False

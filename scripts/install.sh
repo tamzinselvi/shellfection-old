@@ -71,7 +71,7 @@ nl
 # }}}
 
 # {{{ Install PIP Packages
-for pkg in pillow drawille; do
+for pkg in pillow drawille asciiquariam; do
   printf "$Purple"
   printf "$Divider"
   nl

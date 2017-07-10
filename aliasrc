@@ -56,12 +56,17 @@ gitdifftig() {
   git diff $1 | tig
 }
 
+gitremovemerged() {
+  git branch --merged $1 | grep -v $1 | xargs git branch -d
+}
+
 alias g='git'
 alias gi='git init'
 alias gs='git status'
 alias ga='git add'
 alias gaa='git add -A'
 alias gac='git add -A; git commit'
+alias grmm=gitremovemerged
 alias gf='git fetch --prune'
 alias gr='git rebase'
 alias grm='git rebase origin/master'
