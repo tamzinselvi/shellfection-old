@@ -56,7 +56,7 @@ nl
 printf "$Divider"
 nl
 
-for file in pipeseroni-pipes shellfection-screensavers shellfection-welcome shellfection-cube shellfection-game-of-life; do
+for file in pipeseroni-pipes shellfection-screensavers shellfection-welcome shellfection-cube shellfection-game-of-life shellfection-youtube; do
   rm /usr/local/bin/$file
   ln bin/$file /usr/local/bin/$file
   chmod +x /usr/local/bin/$file
@@ -104,7 +104,7 @@ textwrap center "Checking for asciiquarium..."
 nl
 printf "$Divider"
 
-if type asciiquarium > /dev/null 2>&1; then
+if ! type asciiquarium > /dev/null 2>&1; then
   printf "$Yellow"
   nl
   textwrap center "asciiquarium not found, installing..."
