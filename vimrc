@@ -7,13 +7,12 @@ syntax enable
 filetype off
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=~/.config/nvim/bundle/Vundle.vim
 call vundle#begin()
 
 " install Vundle bundles
 if filereadable(expand("~/.vimrc.bundles"))
   source ~/.vimrc.bundles
-  source ~/.vimrc.bundles.local
 endif
 
 call vundle#end()
@@ -122,3 +121,19 @@ let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
 
 " vim-airline
 let g:airline#extensions#tabline#enabled = 1
+
+" os specific configurations
+if system("[[ $(uname -a) =~ Linux.*Microsoft.* ]]")
+  let g:clipboard = {
+      \ 'name': 'win32yank',
+      \ 'copy': {
+      \   '+': 'win32yank.exe -i --crlf',
+      \   '*': 'win32yank.exe -i --crlf',
+      \   },
+      \ 'paste': {
+      \   '+': 'win32yank.exe -o --lf 2>/dev/null',
+      \   '*': 'win32yank.exe -o --lf 2>/dev/null',
+      \   },
+      \ 'cache_enabled': 1,
+      \ }
+endif

@@ -22,12 +22,12 @@ GAMEOFLIFE="shellfection-game-of-life"
 
 ASCIIQUARIUM="asciiquarium"
 
-YOUTUBE="shellfection-youtube"
+MPV_PLAYLIST="shellfection-mpv-playlist"
 
 VIS="vis"
 
 # Map screensavers here
-SCREENSAVERS=( "$PIPES" "$CMATRIX" "$GAMEOFLIFE" "$CUBE" "$ASCIIQUARIUM" "$YOUTUBE" "$VIS" )
+SCREENSAVERS=( "$PIPES" "$CMATRIX" "$GAMEOFLIFE" "$CUBE" "$ASCIIQUARIUM" "$MPV_PLAYLIST" "$VIS" )
 
 # Pick random screensaver from list
 SCREENSAVER=${SCREENSAVERS[$RANDOM % ${#SCREENSAVERS[@]} ]}

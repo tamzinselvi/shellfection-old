@@ -135,7 +135,7 @@ textwrap center "Installing Vundle and Vundles..."
 nl
 printf "$Divider"
 
-if [ -a ~/.vim/bundle/Vundle.vim ]; then 
+if [ -a ~/.config/nvim/bundle/Vundle.vim ]; then 
   printf "$Green"
   nl
   textwrap center "Vundle already installed, continuing..."
@@ -146,8 +146,8 @@ else
   nl
   textwrap center "Vundle not found, installing..."
   nl
-  mkdir ~/.vim >/dev/null 2>&1
-  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+  mkdir -p ~/.config/nvim/bundle
+  git clone https://github.com/VundleVim/Vundle.vim.git ~/.config/nvim/bundle/Vundle.vim
   vim +PluginInstall +qall
   echo "colorscheme holokai" >> ~/.vimrc.local
   let Success=Success+1
@@ -210,52 +210,21 @@ nl
 printf "$Divider"
 nl
 
-for file in vimrc vimrc.local vimrc.bundles vimrc.bundles.local tmux.conf tmux.conf.local zshrc zshrc.local aliasrc aliasrc.local bash_profile bashrc bashrc.local; do
+for file in vimrc vimrc.bundles tmux.conf zshrc aliasrc bash_profile bashrc; do
   rm ~/.$file > /dev/null 2>&1
   ln $file ~/.$file
   printf "$Yellow"
   textwrap center "Linked $file to ~/.$file"
 done
 
+rm ~/.config/nvim/init.vim
+ln vimrc ~/.config/nvim/init.vim
+printf "$Yellow"
+textwrap center "Linked vimrc to ~/.config/nvim/init.vim"
+
 printf "$Green"
 nl
 textwrap center "Finished linking..."
-nl
-# }}}
-
-# {{{ Stop tracking local files
-printf "$Purple"
-printf "$Divider"
-nl
-textwrap center "Untracking local files..."
-nl
-printf "$Divider"
-
-for file in vimrc.local vimrc.bundles.local zshrc.local aliasrc.local bashrc.local tmux.conf.local; do
-  git update-index --assume-unchanged $file
-  printf "$Yellow"
-  textwrap center "Stopped tracking $file"
-done
-
-printf "$Green"
-nl
-textwrap center "Finished untracking..."
-nl
-# }}}
-
-# {{{ Submodules
-printf "$Purple"
-printf "$Divider"
-nl
-textwrap center "Installing submodules..."
-nl
-printf "$Divider"
-
-git submodule update --init --recursive
-
-printf "$Green"
-nl
-textwrap center "Finished installing..."
 nl
 # }}}
 
