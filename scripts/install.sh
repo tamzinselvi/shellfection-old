@@ -56,10 +56,10 @@ nl
 printf "$Divider"
 nl
 
-for file in pipeseroni-pipes shellfection-screensavers shellfection-welcome shellfection-cube shellfection-game-of-life shellfection-youtube; do
-  rm /usr/local/bin/$file
-  ln bin/$file /usr/local/bin/$file
-  chmod +x /usr/local/bin/$file
+for file in pipeseroni-pipes shellfection-screensavers shellfection-welcome shellfection-cube shellfection-game-of-life shellfection-mpv-playlist; do
+  sudo rm /usr/local/bin/$file
+  sudo cp bin/$file /usr/local/bin/$file
+  sudo chmod +x /usr/local/bin/$file
   printf "$Yellow"
   textwrap center "Linked $file to /usr/local/bin/$file"
 done
@@ -117,6 +117,7 @@ if ! type asciiquarium > /dev/null 2>&1; then
   sudo cpan Term::Animation
   cd ../
   rm -rf asciiquarium_1.1/ asciiquarium.tar.gz
+  sudo cpan Term::Animation
   let Success=Success+1
 else
   printf "$Green"

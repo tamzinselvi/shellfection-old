@@ -1,8 +1,0 @@
-" indent guides
-set ts=2 sw=2 et
-let g:indent_guides_start_level = 2
-
-" color column
-set colorcolumn=120
-
-" color scheme

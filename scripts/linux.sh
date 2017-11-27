@@ -1,5 +1,5 @@
 # {{{ Install Packages
-for pkg in libevent-dev libncurses-dev pkg-config vim silversearcher-ag cmatrix wget tig pandoc lynx automake; do
+for pkg in libevent-dev libncurses-dev pkg-config vim silversearcher-ag cmatrix wget tig pandoc lynx automake python python-pip; do
   printf "$Purple"
   printf "$Divider"
   nl
