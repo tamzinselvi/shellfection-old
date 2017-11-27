@@ -136,7 +136,7 @@ textwrap center "Installing Vundle and Vundles..."
 nl
 printf "$Divider"
 
-if [ -a ~/.config/nvim/bundle/Vundle.vim ]; then 
+if [ -d ~/.config/nvim/bundle/Vundle.vim ]; then 
   printf "$Green"
   nl
   textwrap center "Vundle already installed, continuing..."
@@ -181,6 +181,45 @@ if [ "$SHELL" != "$( which zsh )" ]; then
       * ) textwrap center "Please answer yes or no.";;
     esac
   done
+fi
+# }}}
+
+# {{{ oh-my-zsh
+if [ "$SHELL" = "$(which zsh)" ]; then
+  if [ -d ~/.config/oh-my-zsh ]; then
+    printf "$Purple"
+    printf "$Divider"
+    printf "$Green"
+    nl
+    textwrap center "oh-my-zsh already installed, continuing..."
+    nl
+    let NoChanges=NoChanges+1
+  else
+    printf "$Yellow"
+    printf "$Divider"
+    nl
+    textwrap center "Would you like to install oh-my-zsh? [y/N]"
+    nl
+    printf "$Divider"
+    printf "$Color_Off"
+
+    hash -r
+
+    while true; do
+      eval "printf ' %.0s' {1..$DividerWidthHalf}"
+      read -p "" yn
+      case $yn in
+        [Yy]* )
+          git clone https://github.com/robbyrussell/oh-my-zsh ~/.config/oh-my-zsh
+          let Success=Success+1
+          break;;
+        [Nn]* )
+          let Failed=Failed+1
+          break;;
+        * ) textwrap center "Please answer yes or no.";;
+      esac
+    done
+  fi
 fi
 # }}}
 
