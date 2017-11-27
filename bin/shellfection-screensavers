@@ -24,8 +24,10 @@ ASCIIQUARIUM="asciiquarium"
 
 YOUTUBE="shellfection-youtube"
 
+VIS="vis"
+
 # Map screensavers here
-SCREENSAVERS=( "$PIPES" "$CMATRIX" "$GAMEOFLIFE" "$CUBE" "$ASCIIQUARIUM" "$YOUTUBE" )
+SCREENSAVERS=( "$PIPES" "$CMATRIX" "$GAMEOFLIFE" "$CUBE" "$ASCIIQUARIUM" "$YOUTUBE" "$VIS" )
 
 # Pick random screensaver from list
 SCREENSAVER=${SCREENSAVERS[$RANDOM % ${#SCREENSAVERS[@]} ]}
