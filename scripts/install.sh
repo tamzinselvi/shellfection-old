@@ -186,7 +186,7 @@ fi
 
 # {{{ oh-my-zsh
 if [ "$SHELL" = "$(which zsh)" ]; then
-  if [ -d ~/.config/oh-my-zsh ]; then
+  if [ -d ~/.oh-my-zsh ]; then
     printf "$Purple"
     printf "$Divider"
     printf "$Green"
@@ -210,7 +210,7 @@ if [ "$SHELL" = "$(which zsh)" ]; then
       read -p "" yn
       case $yn in
         [Yy]* )
-          git clone https://github.com/robbyrussell/oh-my-zsh ~/.config/oh-my-zsh
+          git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
           let Success=Success+1
           break;;
         [Nn]* )
